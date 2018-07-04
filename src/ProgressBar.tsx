@@ -2,13 +2,13 @@ import * as React from "react";
 import "./ProgressBar.css";
 
 interface IProps extends React.HTMLAttributes<any> {
-  maxValue?: number;
-  minValue?: number;
+  maxvalue?: number;
+  minvalue?: number;
   value: number;
   mode?: ProgressBarMode;
-  valueDisplayMap?: Array<{ key: number; value: string }>;
+  valuedisplaymap?: Array<{ key: number; value: string }>;
   theme?: string;
-  showValueLabel?: boolean;
+  showvaluelabel?: boolean;
 }
 
 export enum ProgressBarMode {
@@ -18,15 +18,15 @@ export enum ProgressBarMode {
 
 export const ProgressBar = (props: IProps) => {
   const {
-    maxValue = 100,
-    minValue = 0,
+    maxvalue = 100,
+    minvalue = 0,
     value,
     mode = ProgressBarMode.percentage,
     theme,
-    valueDisplayMap,
-    showValueLabel = true
+    valuedisplaymap,
+    showvaluelabel = true
   } = props;
-  const errorMessage = validateValueInRange(maxValue, minValue, value)
+  const errorMessage = validateValueInRange(maxvalue, minvalue, value)
     ? `Value(${value}) provided is out of range`
     : null;
 
@@ -34,12 +34,17 @@ export const ProgressBar = (props: IProps) => {
     <div {...props}>
       <div className={`progress-bar-container ${theme || "default"}`}>
         <div className="progress-bar-progress-label">
-          {showValueLabel &&
-            computeValue(maxValue, minValue, value, mode, valueDisplayMap)}
+          {showvaluelabel &&
+            computeValue(maxvalue, minvalue, value, mode, valuedisplaymap)}
         </div>
         <div className="progress-bar-wrapper">
           {!errorMessage && (
-            <div className="progress-bar" style={{ width: `${value}%` }} />
+            <div
+              className="progress-bar"
+              style={{
+                width: `${mapValuetoWidth(maxvalue, minvalue, value)}%`
+              }}
+            />
           )}
           {errorMessage && (
             <div className="progress-bar-error">{errorMessage}</div>
@@ -47,8 +52,8 @@ export const ProgressBar = (props: IProps) => {
         </div>
         {mode === ProgressBarMode.range && (
           <div className="progress-bar-label-container">
-            <div className="progress-bar-min-label">{minValue}</div>
-            <div className="progress-bar-max-label">{maxValue}</div>
+            <div className="progress-bar-min-label">{minvalue}</div>
+            <div className="progress-bar-max-label">{maxvalue}</div>
           </div>
         )}
       </div>
@@ -56,30 +61,30 @@ export const ProgressBar = (props: IProps) => {
   );
 };
 
+const mapValuetoWidth = (maxVal: any, minVal: any, val: number) => {
+  return ((val - minVal) * 100) / (maxVal - minVal);
+};
+
 const validateValueInRange = (maxVal: any, minVal: any, val: number) => {
-  if (typeof maxVal === "number" && typeof minVal === "number") {
-    return !(val <= maxVal && val >= minVal);
-  } else {
-    return false;
-  }
+  return !(val <= maxVal && val >= minVal);
 };
 
 const computeValue = (
-  maxValue: number,
-  minValue: number,
+  maxvalue: number,
+  minvalue: number,
   value: number,
   mode: ProgressBarMode,
-  valueDisplayMap?: Array<{ key: number; value: string }>
+  valuedisplaymap?: Array<{ key: number; value: string }>
 ) => {
-  const currentValueDisplayMapIndex = !!valueDisplayMap
-    ? valueDisplayMap
+  const currentValueDisplayMapIndex = !!valuedisplaymap
+    ? valuedisplaymap
         .filter(kvp => kvp.key <= value)
         .reduce((prev, curr, currIndex, vdp) => {
           return vdp[prev].key >= curr.key ? prev : currIndex;
         }, 0)
     : 0;
 
-  return valueDisplayMap
-    ? valueDisplayMap[currentValueDisplayMapIndex].value
+  return valuedisplaymap
+    ? valuedisplaymap[currentValueDisplayMapIndex].value
     : value + (mode === ProgressBarMode.percentage ? "%" : "");
 };

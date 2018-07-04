@@ -54,7 +54,7 @@ class App extends React.Component<any, IState> {
               className="App-progress-bar"
               mode={ProgressBarMode.percentage}
               value={this.state.superPowerGladiatorMatchProgress}
-              valueDisplayMap={commentary}
+              valuedisplaymap={commentary}
             />
             <p className="App-progress-bar-desc">Thor vs Hulk</p>
           </div>
@@ -64,9 +64,9 @@ class App extends React.Component<any, IState> {
               className="App-progress-bar"
               mode={ProgressBarMode.range}
               value={this.state.progress}
-              showValueLabel={false}
-              minValue={10}
-              maxValue={90}
+              showvaluelabel={false}
+              minvalue={10}
+              maxvalue={90}
             />
             <p className="App-progress-bar-desc">
               {" "}
@@ -78,7 +78,7 @@ class App extends React.Component<any, IState> {
             <ProgressBar
               className="App-progress-bar"
               value={this.state.progress}
-              showValueLabel={false}
+              showvaluelabel={false}
             />
             <p className="App-progress-bar-desc">Demo with hidden label </p>
           </div>
